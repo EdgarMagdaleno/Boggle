@@ -146,7 +146,8 @@ char *searchWord(char word[], Trie *root) {
 }
 
 // Will build a trie with all the words in the board.
-void depthFirstSearch(char board[4][4], bool visited[4][4], int i, int j, char word[], int last, Trie *dictionary, Trie *solution, char *words[100], int &wordsIndex) {
+void depthFirstSearch(char board[4][4], bool visited[4][4], int i, int j, char word[], int last, Trie *dictionary, Trie *solution, char *found[200], int &index) {
+
 	// Set the current cell as visited.
 	visited[i][j] = true;
 
@@ -154,22 +155,26 @@ void depthFirstSearch(char board[4][4], bool visited[4][4], int i, int j, char w
 	word[last] = board[i][j];
 
 	// Check if the current word is in the dictionary.
-	if(searchWord(word, dictionary)) {
+	char *isWord = searchWord(word, dictionary);
+	if(isWord) {
 
 		// If the word has not already been found, add it to the trie.
 		if(!searchWord(word, solution)) {
-			words[1] = insertWord(word, solution);
-			std::cout << "Algo bien: " << words[1] << "\n";
-		}
+			insertWord(word, solution);
 
+			// Add the word to the list of solutions, increment the current index by 1.
+			found[index] = isWord;
+			index++;
+		}
 	}
 
 	// Search on the neighbors.
 	for (int x = i - 1; x <= i + 1 && x < 4; x++) {
 		for (int y = j - 1; y <= j + 1 && y < 4; y++) {
 			if (x >= 0 && y >= 0 && !visited[x][y]) {
+
 				// Indicate the last element in the word is the next one to the current.
-				depthFirstSearch(board, visited, x, y, word, last + 1, dictionary, solution, words, wordsIndex);
+				depthFirstSearch(board, visited, x, y, word, last + 1, dictionary, solution, found, index);
 			}
 		}
 	}
@@ -179,24 +184,24 @@ void depthFirstSearch(char board[4][4], bool visited[4][4], int i, int j, char w
 	visited[i][j] = false;
 }
 
-void solve(char board[4][4], Trie *dictionary, char *words[100]) {
+void solve(char board[4][4], Trie *dictionary, char *found[200]) {
 	Trie *solution = new Trie();
+
 	// Set all characters on the board as not visited.
 	bool visited[4][4] = {{false}};
 
 	// Buffer used to search the current word in the dictionary.
 	char currentWord[16];
 
-	int wordsIndex = 0;
+	// Index used to keep track of the last place in the list.
+	int index = 0;
 
 	// Apply Depth-First Search to every character on the board.
 	for(int x = 0; x < 4; x++) {
 		for(int y = 0; y < 4; y++) {
-			depthFirstSearch(board, visited, x, y, currentWord, 0, dictionary, solution, words, wordsIndex);
+			depthFirstSearch(board, visited, x, y, currentWord, 0, dictionary, solution, found, index);
 		}
 	}
-
-	std::cout << "Last: " << words[1];
 }
 
 // Prints a matrix, used for debugging purposes.
@@ -215,12 +220,6 @@ int main() {
 	clock_t t = clock();
 
 	// Create a new board
-	/*
-	char board[4][4] = {{'o', 'x', 'y', 'w'},
-						{'s', 'b', 'a', 'c'},
-						{'u', 't', 'u', 'l'},
-						{'o', 'h', 'w', 't'}};
-	*/
 	char board[4][4];
 	createBoard(board);
 
@@ -233,10 +232,16 @@ int main() {
 	// Create the trie with the dictionary in memory.
 	Trie *dictionary = createTrie(dictionaryBuffer);
 
-	// Create a second trie, this one will have all the words found in the board.
-	char *words[100] = {nullptr};
+	// Create a list of pointer which will adress the words in the board.
+	char *words[200] = {nullptr};
 
+	// Fill the list.
 	solve(board, dictionary, words);
+
+	// Print the list.
+	for(int i = 0; words[i]; i++) {
+		std::cout << words[i] << std::endl;
+	}
 
 	// Calculate and print runtime.
 	t = clock() - t;
