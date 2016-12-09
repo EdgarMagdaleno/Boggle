@@ -3,6 +3,7 @@
 
 int main() {
 	Boggle *boggle = new Boggle();
+
 	boggle->newGame();
 
 	for(int x = 0; x < 4; x++) {

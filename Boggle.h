@@ -15,11 +15,9 @@ class Boggle {
 		char *dictionaryBuffer = nullptr;
 		Trie *dictionary = nullptr;
 		Trie *solution = nullptr;
-		char *searchWord(char word[], Trie *root);
 		void createBoard();
 		void readDictionary();
 		void createTrie();
 		void solve();
-		char *insertWord(char word[], Trie *root);
-		void depthFirstSearch(bool visited[4][4], int i, int j, char word[], int last, int &index);
+		void depthFirstSearch(bool visited[4][4], int i, int j, char *word, int last, int &index);
 };

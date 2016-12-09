@@ -1,13 +1,10 @@
+#define alphabetSize 26
+
 class Trie {
 	public:
+		Trie();
 		Trie *children[alphabetSize];
 		char *word;
-
-		Trie() {
-			for(int i = 0; i < alphabetSize; i++) {
-				children[i] = nullptr;
-			}
-
-			word = nullptr;
-		}
+		void add(char *word);
+		char *contains(char *word);
 };

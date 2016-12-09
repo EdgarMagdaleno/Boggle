@@ -30,41 +30,15 @@ void Boggle::createBoard() {
 	}
 }
 
-char *Boggle::insertWord(char word[], Trie *root){
-	Trie *current = root;
-
-	// Iterate through all the letter in the word.
-	for(int i = 0; word[i]; i++) {
-
-		// Transform character to index in the alphabet.
-		int letter = word[i] - 'a';
-
-		// If letter is a Q, ignore the next letter as we now already it is a U.
-		if(letter == 16) i++;
-
-		if(current->children[letter] == nullptr) {
-			current->children[letter] = new Trie();
-		}
-
-		current = current->children[letter];
-	}
-
-	// Set this Trie as the end of a word.
-	current->word = word;
-	return current->word;
-}
-
 void Boggle::createTrie() {
 	std::cout << "Creating trie... ";
 	dictionary = new Trie();
 
 	char *word = strtok(dictionaryBuffer, "\n\t");
-	int wordLength;
-
+	
 	// Read until we reach the end of the file.
 	while(word != nullptr) {
-		// We do not care about words smaller than 3 characters.
-		if(strlen(word) > 2) insertWord(word, dictionary);
+		dictionary->add(word);
 
 		// Source is only specified at the start, otherwise, it will loop.
 		word = strtok(nullptr, "\n\t");
@@ -97,44 +71,28 @@ void Boggle::readDictionary() {
 	std::cout << "Done.\n";
 }
 
-char *Boggle::searchWord(char word[], Trie *root) {
-	Trie *current = root;
-
-	for(int i = 0; word[i]; i++) {
-		int letter = word[i] - 'a';
-		if(current->children[letter] != nullptr) {
-			current = current->children[letter];
-		} else {
-			return nullptr;
-		}
-	}
-
-	return current->word;
-}
-
 // Will build a trie with all the words on the board.
-void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char word[], int last, int &index) {
+void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char *currentWord, int last, int &index) {
 
 	// Set the current cell as visited.
 	visited[i][j] = true;
 
 	// Last character in the array is set to the current character in the board.
-	word[last] = board[i][j];
+	currentWord[last] = board[i][j];
 
 	// Check if the current word is in the dictionary.
-	char *isWord = searchWord(word, dictionary);
-	if(isWord != nullptr) {
-		// If the word has not already been found, add it to the trie.
-		searchWord(word, solution);
-		if(!searchWord(word, solution)) {
-			insertWord(word, solution);
+	char *isWord = dictionary->contains(currentWord);
 
-			// Add the word to the list of solutions, increment the current index by 1.
-			words[index] = isWord;
-			index++;
-			words[index] = &lineFeed;
-			index++;
-		}
+	// If the word has not already been found, add it to the trie.
+	if(isWord && !solution->contains(currentWord)) {
+		solution->add(currentWord);
+
+		// Add the word to the list of solutions, increment the current index by 1.
+		words[index] = isWord;
+		index++;
+
+		words[index] = &lineFeed;
+		index++;
 	}
 
 	// Search on the neighbors.
@@ -143,13 +101,13 @@ void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char word[], int
 			if (x >= 0 && y >= 0 && !visited[x][y]) {
 
 				// Indicate the last element in the word is the next one to the current.
-				depthFirstSearch(visited, x, y, word, last + 1, index);
+				depthFirstSearch(visited, x, y, currentWord, last + 1, index);
 			}
 		}
 	}
  
 	// Mark the last character as null terminated.
-	word[last] = '\0';
+	currentWord[last] = '\0';
 	visited[i][j] = false;
 }
 
