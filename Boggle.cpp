@@ -35,7 +35,7 @@ void Boggle::createTrie() {
 	dictionary = new Trie();
 
 	char *word = strtok(dictionaryBuffer, "\n\t");
-	
+
 	// Read until we reach the end of the file.
 	while(word != nullptr) {
 		dictionary->add(word);
@@ -72,13 +72,13 @@ void Boggle::readDictionary() {
 }
 
 // Will build a trie with all the words on the board.
-void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char *currentWord, int last, int &index) {
+void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char *currentWord, int currentWordIndex, int &solutionIndex) {
 
 	// Set the current cell as visited.
 	visited[i][j] = true;
 
 	// Last character in the array is set to the current character in the board.
-	currentWord[last] = board[i][j];
+	currentWord[currentWordIndex] = board[i][j];
 
 	// Check if the current word is in the dictionary.
 	char *isWord = dictionary->contains(currentWord);
@@ -87,27 +87,24 @@ void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char *currentWor
 	if(isWord && !solution->contains(currentWord)) {
 		solution->add(currentWord);
 
-		// Add the word to the list of solutions, increment the current index by 1.
-		words[index] = isWord;
-		index++;
+		words[solutionIndex] = isWord;
+		solutionIndex++;
 
-		words[index] = &lineFeed;
-		index++;
+		words[solutionIndex] = &lineFeed;
+		solutionIndex++;
 	}
 
 	// Search on the neighbors.
 	for (int x = i - 1; x <= i + 1 && x < 4; x++) {
 		for (int y = j - 1; y <= j + 1 && y < 4; y++) {
 			if (x >= 0 && y >= 0 && !visited[x][y]) {
-
-				// Indicate the last element in the word is the next one to the current.
-				depthFirstSearch(visited, x, y, currentWord, last + 1, index);
+				depthFirstSearch(visited, x, y, currentWord, currentWordIndex + 1, solutionIndex);
 			}
 		}
 	}
  
 	// Mark the last character as null terminated.
-	currentWord[last] = '\0';
+	currentWord[currentWordIndex] = '\0';
 	visited[i][j] = false;
 }
 
@@ -120,13 +117,13 @@ void Boggle::solve() {
 	// Buffer used to search the current word in the dictionary.
 	char currentWord[16];
 
-	// Index used to keep track of the last place in the list.
-	int index = 0;
+	// Index used to keep track of the last place in the solution list.
+	int solutionIndex = 0;
 
 	// Apply Depth-First Search to every character on the board.
 	for(int x = 0; x < 4; x++) {
 		for(int y = 0; y < 4; y++) {
-			depthFirstSearch(visited, x, y, currentWord, 0, index);
+			depthFirstSearch(visited, x, y, currentWord, 0, solutionIndex);
 		}
 	}
 }
