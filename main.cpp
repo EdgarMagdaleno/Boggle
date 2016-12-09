@@ -1,5 +1,5 @@
+#include <iostream>
 #include "Boggle.h"
-#include "iostream"
 
 int main() {
 	Boggle *boggle = new Boggle();
@@ -9,7 +9,7 @@ int main() {
 		for(int y = 0; y < 4; y++) {
 			std::cout << boggle->board[x][y] << " ";
 		}
-		
+
 		std::cout << std::endl;
 	}
 

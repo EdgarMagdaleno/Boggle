@@ -1,10 +1,10 @@
 class Trie {
 	public:
-		Trie *children[26];
+		Trie *children[alphabetSize];
 		char *word;
 
 		Trie() {
-			for(int i = 0; i < 26; i++) {
+			for(int i = 0; i < alphabetSize; i++) {
 				children[i] = nullptr;
 			}
 

@@ -1,3 +1,5 @@
+#define alphabetSize 26
+
 #include "Trie.h"
 
 class Boggle {
@@ -9,11 +11,11 @@ class Boggle {
 		char *words[200] = {nullptr};
 
 	private:
+		char lineFeed = '\n';
 		char *dictionaryBuffer = nullptr;
 		Trie *dictionary = nullptr;
 		Trie *solution = nullptr;
 		char *searchWord(char word[], Trie *root);
-		char *lineFeed = "\n";
 		void createBoard();
 		void readDictionary();
 		void createTrie();

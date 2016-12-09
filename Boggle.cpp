@@ -39,6 +39,9 @@ char *Boggle::insertWord(char word[], Trie *root){
 		// Transform character to index in the alphabet.
 		int letter = word[i] - 'a';
 
+		// If letter is a Q, ignore the next letter as we now already it is a U.
+		if(letter == 16) i++;
+
 		if(current->children[letter] == nullptr) {
 			current->children[letter] = new Trie();
 		}
@@ -129,7 +132,7 @@ void Boggle::depthFirstSearch(bool visited[4][4], int i, int j, char word[], int
 			// Add the word to the list of solutions, increment the current index by 1.
 			words[index] = isWord;
 			index++;
-			words[index] = lineFeed;
+			words[index] = &lineFeed;
 			index++;
 		}
 	}
