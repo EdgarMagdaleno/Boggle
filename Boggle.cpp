@@ -3,6 +3,11 @@
 #include <ctime>
 #include "Boggle.h"
 
+void errorLog(std::string message, int exitCode) {
+	std::cout << "ERROR: " << message << std::endl;
+	exit(exitCode); 
+}
+
 Boggle::Boggle() {
 	readDictionary();
 	createTrie();
@@ -11,11 +16,6 @@ Boggle::Boggle() {
 void Boggle::newGame() {
 	createBoard();
 	solve();
-}
-
-void errorLog(std::string message, int exitCode) {
-	std::cout << "ERROR: " << message << std::endl;
-	exit(exitCode); 
 }
 
 void Boggle::createBoard() {
@@ -170,16 +170,5 @@ void Boggle::solve() {
 		for(int y = 0; y < 4; y++) {
 			depthFirstSearch(visited, x, y, currentWord, 0, index);
 		}
-	}
-}
-
-// Prints a matrix, used for debugging purposes.
-void print(char board[4][4]) {
-	for(int x = 0; x < 4; x++) {
-		for(int y = 0; y < 4; y++) {
-			std::cout << board[x][y] << " ";
-		}
-
-		std::cout << std::endl;
 	}
 }

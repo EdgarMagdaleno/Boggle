@@ -1,2 +1,2 @@
 all:
-	g++ -std=c++11 main.cpp Boggle.cpp Boggle.h -o run
+	g++ -std=c++11 main.cpp Boggle.cpp -o run
