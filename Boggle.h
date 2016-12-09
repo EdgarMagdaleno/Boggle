@@ -1,5 +1,4 @@
 #define alphabetSize 26
-
 #include "Trie.h"
 
 class Boggle {

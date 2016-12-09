@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Boggle.h"
+#include "mainwindow.h"
 
 /*
 	Boggle constructor loads the dictionary, creates a random board and solves it.
@@ -10,7 +11,8 @@
 */
 
 int main() {
-	Boggle *boggle = new Boggle();
+
+    /*Boggle *boggle = new Boggle();
 	boggle->newGame();
 
 	for(int x = 0; x < 4; x++) {
@@ -23,5 +25,5 @@ int main() {
 
 	for(int i = 0; boggle->words[i]; i++) {
 		std::cout << boggle->words[i];
-	}
+    }*/
 }
