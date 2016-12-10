@@ -2,10 +2,12 @@
 #define WIDGET_H
 
 #include "Boggle.h"
+#include <string>
 #include <QWidget>
 #include <QtCore>
 #include <QtGui>
 #include <QMessageBox>
+#include <QTimer>
 
 namespace Ui{
 class Widget;
@@ -18,18 +20,21 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
  	void setLine(const QString &str);
- 	QString lineInput() const;
- 	void showInput() const;
-
+ 	void updateBoard();
+ 	
 private slots:
 	void jugarClicked();
 	void nuevoClicked();
 	void rotarClicked();
 	void resolverClicked();
-	
+	void lineEditReturn();
+	void tiempoTerminado();
+
 private:
     Ui::Widget *ui;
+    QTimer *timer;
     Boggle *boggle;
+    int points;
 };
 
 #endif // WIDGET_H
