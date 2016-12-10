@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Boggle.h"
 #include <QApplication>
 #include "widget.h"
 
@@ -16,9 +15,6 @@ int main(int argc, char *argv[]) {
 
 	QApplication app(argc, argv);
 	Widget w;
-	
-	Boggle *boggle = new Boggle();
-	boggle->newGame();
 	
 	w.setLine("Boggle");
 	w.show();

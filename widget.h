@@ -1,8 +1,10 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include "Boggle.h"
 #include <QWidget>
-#include <QCloseEvent>
+#include <QtCore>
+#include <QtGui>
 #include <QMessageBox>
 
 namespace Ui{
@@ -18,13 +20,16 @@ public:
  	void setLine(const QString &str);
  	QString lineInput() const;
  	void showInput() const;
- 	bool shouldClose();
 
-protected:
-    void closeEvent(QCloseEvent *event);
- 
+private slots:
+	void jugarClicked();
+	void nuevoClicked();
+	void rotarClicked();
+	void resolverClicked();
+	
 private:
     Ui::Widget *ui;
+    Boggle *boggle;
 };
 
 #endif // WIDGET_H
