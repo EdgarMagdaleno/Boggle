@@ -13,8 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        widget.cpp
+        widget.cpp \
+    Boggle.cpp \
+    Trie.cpp
 
-HEADERS  += widget.h
+HEADERS  += widget.h \
+    Boggle.h \
+    Trie.h
 
 FORMS    += widget.ui
+
+@CONFIG += debug_and_release@
